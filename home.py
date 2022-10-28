@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter.messagebox import showinfo
+
 import sqlite3
 from sqlite3 import Error
 import os
@@ -63,7 +65,7 @@ class HomeWindow(Tk):
         self.listTree.column("priority",width=100,minwidth=100,anchor='center')
         self.listTree.column("reported_date",width=100,minwidth=100,anchor='center')
         self.listTree.column("fixed_date",width=100,minwidth=100,anchor='center')
-                
+        
         self.listTree.place(x=90,y=400)
         self.vsb.place(x=1142,y=400,height=287)
         self.hsb.place(x=91,y=687,width=1050)
@@ -135,26 +137,6 @@ class HomeWindow(Tk):
                 #     messagebox.showinfo("Error", "Either Defect ID is wrong or the road name is not yet exist.")
             except Error:
                 messagebox.showerror("Error","Something Goes Wrong")
-                
-        def search_by_road_name():
-            """Search by road name."""
-            
-            try:
-                self.conn = sqlite3.connect(defect_database.database_name)
-                self.myCursor = self.conn.cursor()
-                self.myCursor.execute("Select * from defects where defect_road_name like ?",['%'+ self.road_name.get() + '%'])
-                self.pc = self.myCursor.fetchall()
-                if self.pc:
-                    self.listTree.delete(*self.listTree.get_children())
-                    row_num = 1
-                    for row in self.pc:
-                        self.listTree.insert("",'end',text=row[0] ,values = (row_num, row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
-                        row_num +=1
-                else:
-                    # messagebox.showinfo("Info", "There is no matching data")
-                    self.listTree.delete(*self.listTree.get_children())
-            except Error:
-                messagebox.showerror("Error", "Something Goes Wrong")
 
         def check():
             try:
@@ -190,6 +172,14 @@ class HomeWindow(Tk):
                     
             except Error:
                 messagebox.showerror("Error", "Something Goes Wrong")
+                
+        def item_selected(event):
+            """Data is seleted then do some actions."""
+            for selected_item in self.listTree.selection():
+                item = self.listTree.item(selected_item)
+                record = item['values']
+                # show a message
+                self.showinfo(title='Information', message=','.join(record))
         check()
         show_all_data()
 
