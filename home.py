@@ -9,6 +9,7 @@ import sys
 from tkinter import ttk
 from database.defect_database import defect_database
 
+
 py=sys.executable
 
 #creating window
@@ -31,11 +32,6 @@ class HomeWindow(Tk):
     def add_defect(self):
         os.system('%s %s' % (py, 'defect/add_defect.py'))
 
-        
-
-        # def handle(event):
-        #     if self.listTree.identify_region(event.x,event.y) == "separator":
-        #         return "break"
     def add_user(self):
         os.system('%s %s' % (py, 'admin/admin_user_reg.py'))
         
@@ -171,8 +167,11 @@ class HomeWindow(Tk):
                 # self.brt = Button(self, text='Find', width=15, font=('arial', 10),command = search_by_road_name).place(x=700, y=266)
                 self.label6 = Label(self, text="Details", bg='light blue', font=('Arial', 14, 'underline', 'bold'))
                 self.label6.place(x=100, y=350)
-                self.button = Button(self, text='Search Defect ID', width=20, font=('Algerian', 20)).place(x=1000,y=150)
-                self.button = Button(self, text='Search Road Name', width=20, font=('Algerian', 20)).place(x=1000,y=250)
+                self.button = Button(self, text='Search Defect ID', width=20, font=('Arial', 20)).place(x=1000,y=150)
+                self.button = Button(self, text='Search Road Name', width=20, font=('Arial', 20)).place(x=1000,y=250)
+                
+                # edit button 
+                self.button = Button(self, text='Edit', width=10, font=('Arial', 11), command=self.goto_defect_edit).place(x=1200,y=500)
                 
         except Error:
             messagebox.showerror("Error", "Something Goes Wrong")
@@ -186,11 +185,22 @@ class HomeWindow(Tk):
             # self.showinfo(title='Information', message=','.join(record))
             print(type(record))
             # a = ','.join(str(record))
-            # print(a)
-            showinfo(title='Information', message=repr(tuple(record)))
+            print(repr(tuple(record)))
+            # showinfo(title='Information', message=repr(tuple(record)))
             
+    def goto_defect_edit(self):
+        for selected_item in self.listTree.selection():
+            item = self.listTree.item(selected_item)
+            record = item['values']
+            # showinfo(title='Information', message=repr(tuple(record)))
+            print(record[0])
+            os.system('%s %s %s' % (py, 'defect/edit_defect.py',record[0]))
             
         # check()
         # show_all_data()
-
+    
+    def update(self):
+        """Refresh screen"""
+        pass
+    
 HomeWindow().mainloop()
