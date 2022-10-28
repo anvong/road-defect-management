@@ -40,7 +40,8 @@ class add_defect(Tk):
             # lms_db = lms_database()
             self.conn = sqlite3.connect("defect_management.db")
             self.myCursor = self.conn.cursor()
-            parameters = [self.defect_id.get(),
+            parameters = [
+                        # self.defect_id.get(),
                           self.defect_road_name.get(),
                           self.defect_address.get(),
                           self.status.get(),
@@ -51,7 +52,7 @@ class add_defect(Tk):
                           ]
             print(parameters)
             # parameters = [1, '213', 'ada', 'aD', 'ad', 'aDa', None , None ]
-            c = self.myCursor.execute("Insert into defects values (?,?,?,?,?,?,?,?)", parameters)
+            c = self.myCursor.execute("Insert into defects(defect_road_name,defect_address,status,severity,priority,reported_date,fixed_date) values (?,?,?,?,?,?,?)", parameters)
             self.conn.commit()
             self.myCursor.close()
             self.conn.close()
@@ -71,9 +72,10 @@ class add_defect(Tk):
     # verify input
     def verify(self):
         
-        if len(self.defect_id.get()) == 0:
-            messagebox.showinfo("Error","Please enter defect id")
-        elif len(self.defect_road_name.get()) == 0:
+        # if len(self.defect_id.get()) == 0:
+        #     messagebox.showinfo("Error","Please enter defect id")
+        # el
+        if len(self.defect_road_name.get()) == 0:
             messagebox.showinfo("Error","Please input road name")
         elif len(self.defect_address.get()) == 0:
             messagebox.showinfo("Error","Please input defect address")
@@ -91,7 +93,7 @@ class add_defect(Tk):
         input_form = Frame(self, width=650, height=480, bg="light blue").place(x=370, y=200)
         Label(self,text="New defect entry",font=("Arial",35,'bold'),fg="white",bg="dark blue").place(x=480,y=80)
         # input form lable
-        Label(input_form, text="Defect ID", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=260)
+        # Label(input_form, text="Defect ID", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=260)
         Label(input_form, text="Road Name", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=300)
         Label(input_form, text="Road Address", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=340)
         Label(input_form, text="Status", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=380)
@@ -101,7 +103,7 @@ class add_defect(Tk):
         Label(input_form, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
         
         # input text field for defect id, road name, address
-        Entry(input_form, textvariable=self.defect_id, width=60).place(x=620,y=260)
+        # Entry(input_form, textvariable=self.defect_id, width=60).place(x=620,y=260)
         Entry(input_form, textvariable=self.defect_road_name, width=60).place(x=620, y=300)
         Entry(input_form, textvariable=self.defect_address, width=60).place(x=620, y=340)
         
