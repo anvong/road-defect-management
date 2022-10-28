@@ -220,6 +220,10 @@ class HomeWindow(Tk):
                 self.radio_priority_all = Radiobutton(self, text="All", variable=self.search_priority, value="all",bg='light blue')
                 self.radio_priority_all.place(x=1020, y=230)
                 
+                #set default value to radio to all
+                self.search_status.set("all")
+                self.search_severity.set("all")
+                self.search_priority.set("all")
                 # search result list
                 # self.brt = Button(self, text='Find', width=15, font=('arial', 10),command = search_by_road_name).place(x=700, y=266)
                 self.label6 = Label(self, text="Details", bg='light blue', font=('Arial', 12, 'underline', 'bold'))
