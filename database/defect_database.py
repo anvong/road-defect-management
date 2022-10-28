@@ -41,15 +41,17 @@ class defect_database():
         #SQL to create defects table
         create_defects_table = """
             CREATE TABLE IF NOT EXISTS defects (
-                "defect_id"	INTEGER NOT NULL UNIQUE,
-                "defect_road_name"	TEXT NOT NULL,
-                "defect_address"	TEXT NOT NULL,
-                "status"	TEXT NOT NULL,
-                "severity"	TEXT NOT NULL,
-                "priority"	TEXT NOT NULL,
-                "reported_date"	DATE NOT NULL,
-                "fixed_date"	DATE NOT NULL,
-                PRIMARY KEY("defect_id") 
+                defect_id        INTEGER NOT NULL UNIQUE,
+                defect_road_name TEXT    NOT NULL,
+                defect_address   TEXT    NOT NULL,
+                status           TEXT    NOT NULL,
+                severity         TEXT    NOT NULL,
+                priority         TEXT    NOT NULL,
+                reported_date    DATE    NOT NULL,
+                fixed_date       DATE    NOT NULL,
+                description      TEXT,
+                deleted_flag     BOOLEAN,
+                PRIMARY KEY (defect_id) 
             );
         """
         # execute SQL to create admin table 

@@ -22,11 +22,19 @@ class HomeWindow(Tk):
         self.minsize(1366, 768)
         self.state('zoomed')
         self.title('Defect Management - Home')
+        # search value
         self.defect_id = StringVar()
         self.road_name = StringVar()
+        self.search_status = StringVar()
+        self.search_severity = StringVar()
+        self.search_priority = StringVar()
+        # menu setup
         self.mymenu = Menu(self)
-        self.check()
+        # setup_search_condition
+        self.setup_search_condition()
+        # generate grid layout
         self.create_tree_widget()
+        # load data to list
         self.show_all_data()
     #calling scripts
     def add_defect(self):
@@ -94,23 +102,37 @@ class HomeWindow(Tk):
             self.myCursor = self.conn.cursor()
             self.defect_id_input = self.defect_id.get()
             self.defect_road_name_input = self.road_name.get()
-            select_sql = "Select * from defects where 1 "
+            status_radio = self.search_status.get()
+            print("status",status_radio)
+            select_sql = "Select * from defects where deleted_flag = 0 "
             parameters =[]
             # check search input
             if self.defect_id_input !="":
                 select_sql += " AND defect_id = ?"
                 parameters += [self.defect_id_input]
-            if (self.defect_road_name_input):
+            if self.defect_road_name_input:
                 select_sql += " AND defect_road_name like ?"
                 parameters += [self.defect_road_name_input]
+            if self.search_status.get() != "" and self.search_status.get() != "all":
+                select_sql += " AND status = ?"
+                parameters += [self.search_status.get()]
+            if self.search_severity.get() != "" and self.search_severity.get() != "all":
+                select_sql += " AND severity = ?"
+                parameters += [self.search_severity.get()]
+            if self.search_priority.get() != "" and self.search_priority.get() != "all":
+                select_sql += " AND priority = ?"
+                parameters += [self.search_priority.get()]
+                
             print(select_sql)
+            print(parameters)
             self.myCursor.execute(select_sql,parameters)
             self.pc = self.myCursor.fetchall()
             if self.pc:
                 self.listTree.delete(*self.listTree.get_children())
                 row_num = 1
                 for row in self.pc:
-                    self.listTree.insert("",'end',text=row[0] ,values = (row_num, row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
+                    print(row)
+                    self.listTree.insert("",'end',text=row_num ,values = (row[0], row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
                     row_num +=1
             else:
                 # messagebox.showinfo("Error", "Either Defect ID is wrong or the road name is not yet exist.")
@@ -125,20 +147,20 @@ class HomeWindow(Tk):
             self.conn = sqlite3.connect(defect_database.database_name)
             self.myCursor = self.conn.cursor()
             
-            self.myCursor.execute("Select * from defects")
+            self.myCursor.execute("SELECT * FROM defects WHERE deleted_flag = 0 ")
             self.pc = self.myCursor.fetchall()
             if self.pc:
                 self.listTree.delete(*self.listTree.get_children())
                 row_num = 1
                 for row in self.pc:
-                    self.listTree.insert("",'end',text=row[0] ,values = (row_num, row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
+                    self.listTree.insert("",'end',text=row_num ,values = (row[0], row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
                     row_num +=1
             # else:
             #     messagebox.showinfo("Error", "Either Defect ID is wrong or the road name is not yet exist.")
         except Error:
             messagebox.showerror("Error","Something Goes Wrong")
 
-    def check(self):
+    def setup_search_condition(self):
         try:
             conn = sqlite3.connect(defect_database.database_name)
             mycursor = conn.cursor()
@@ -146,30 +168,64 @@ class HomeWindow(Tk):
             z = mycursor.fetchone()
             if not z:
                 messagebox.showinfo("Error", "Please Register A user")
-                x = messagebox.askyesno("Confirm","Do you want to register a user")
+                x = messagebox.askyesno("Confirm","Do you want to register a user?")
                 if x:
                     self.destroy()
                     os.system('%s %s' % (py, 'admin/admin_user_reg.py'))
             else:
                 #label and input box
                 self.label3 = Label(self, text='ASAP Defect List', bg='light blue', font=('Arial', 30, 'bold'))
-                self.label3.place(x=350, y=80)
+                self.label3.place(x=450, y=40)
                 # search defect id input field
-                self.label4 = Label(self, text="Enter Defect ID", bg='light blue', font=('Arial', 14, 'bold'))
-                self.label4.place(x=100, y=200)
-                self.e1 = Entry(self, textvariable=self.defect_id, width=40).place(x=350, y=210)
-                self.srt = Button(self, text='Search', width=15, font=('arial', 10),command = self.search_defect).place(x=700, y=206)
-                # self.label5 = Label(self, text='OR', bg='light blue', font=('arial', 14, 'bold')).place(x=170, y=235)
-                self.label5 = Label(self, text="Enter Road Name", bg='light blue', font=('Arial', 14, 'bold'))
-                self.label5.place(x=100, y=260)
-                # search road name input field
-                self.e2 = Entry(self, textvariable=self.road_name, width=40).place(x=350, y=270)
-                # self.brt = Button(self, text='Find', width=15, font=('arial', 10),command = search_by_road_name).place(x=700, y=266)
-                self.label6 = Label(self, text="Details", bg='light blue', font=('Arial', 14, 'underline', 'bold'))
-                self.label6.place(x=100, y=350)
-                self.button = Button(self, text='Search Defect ID', width=20, font=('Arial', 20)).place(x=1000,y=150)
-                self.button = Button(self, text='Search Road Name', width=20, font=('Arial', 20)).place(x=1000,y=250)
+                self.label4 = Label(self, text="Enter Defect ID", bg='light blue', font=('Arial', 12, 'bold'))
+                self.label4.place(x=100, y=150)
+                self.e1 = Entry(self, textvariable=self.defect_id, width=40).place(x=350, y=150)
+                # self.label5 = Label(self, text='OR', bg='light blue', font=('arial', 12, 'bold')).place(x=170, y=235)
+                self.label5 = Label(self, text="Enter Road Name", bg='light blue', font=('Arial', 12, 'bold'))
+                self.label5.place(x=100, y=190)
                 
+                # search road name input field
+                self.e2 = Entry(self, textvariable=self.road_name, width=40).place(x=350, y=190)
+                # status condition
+                self.label_status = Label(self, text="Status", bg='light blue', font=('Arial', 12, 'bold'))
+                self.label_status.place(x=660, y=150)
+                self.radio_status_1 = Radiobutton(self, text="New", variable=self.search_status, value="new",bg='light blue')
+                self.radio_status_1.place(x=760, y=150)
+                self.radio_status_2 = Radiobutton(self, text="In progress", variable=self.search_status, value="in progress",bg='light blue')
+                self.radio_status_2.place(x=840, y=150)
+                self.radio_status_3 = Radiobutton(self, text="Done", variable=self.search_status, value="done",bg='light blue')
+                self.radio_status_3.place(x=940, y=150)
+                self.radio_status_all = Radiobutton(self, text="All", variable=self.search_status, value="all",bg='light blue')
+                self.radio_status_all.place(x=1020, y=150)
+                # radio button for severity
+                self.label_severity = Label(self, text="Severity", bg='light blue', font=('Arial', 12, 'bold'))
+                self.label_severity.place(x=660, y=190)
+                self.radio_severity_1 = Radiobutton(self, text="Critical", variable=self.search_severity, value="critical",bg='light blue')
+                self.radio_severity_1.place(x=760, y=190)
+                self.radio_severity_2 = Radiobutton(self, text="Major", variable=self.search_severity, value="major",bg='light blue')
+                self.radio_severity_2.place(x=840, y=190)
+                self.radio_severity_3 = Radiobutton(self, text="Minor", variable=self.search_severity, value="minor",bg='light blue')
+                self.radio_severity_3.place(x=940, y=190)
+                self.radio_severity_all = Radiobutton(self, text="All", variable=self.search_severity, value="all",bg='light blue')
+                self.radio_severity_all.place(x=1020, y=190)
+                # radio button for priority
+                self.label_priority = Label(self, text="Priority", bg='light blue', font=('Arial', 12, 'bold'))
+                self.label_priority.place(x=660, y=230)
+                self.radio_priority_1 = Radiobutton(self, text="High", variable=self.search_priority, value="high",bg='light blue')
+                self.radio_priority_1.place(x=760, y=230)
+                self.radio_priority_2 = Radiobutton(self, text="Medium", variable=self.search_priority, value="medium",bg='light blue')
+                self.radio_priority_2.place(x=840, y=230)
+                self.radio_priority_3 = Radiobutton(self, text="Low", variable=self.search_priority, value="low",bg='light blue')
+                self.radio_priority_3.place(x=940, y=230)
+                self.radio_priority_all = Radiobutton(self, text="All", variable=self.search_priority, value="all",bg='light blue')
+                self.radio_priority_all.place(x=1020, y=230)
+                
+                # search result list
+                # self.brt = Button(self, text='Find', width=15, font=('arial', 10),command = search_by_road_name).place(x=700, y=266)
+                self.label6 = Label(self, text="Details", bg='light blue', font=('Arial', 12, 'underline', 'bold'))
+                self.label6.place(x=100, y=350)
+                # search button
+                self.srt = Button(self, text='Search', width=15, font=('arial', 10),command = self.search_defect).place(x=700, y=280)
                 # edit button 
                 self.button = Button(self, text='Edit', width=10, font=('Arial', 11), command=self.goto_defect_edit).place(x=1200,y=500)
                 
@@ -196,11 +252,9 @@ class HomeWindow(Tk):
             print(record[0])
             os.system('%s %s %s' % (py, 'defect/edit_defect.py',record[0]))
             
-        # check()
-        # show_all_data()
+        # setup_search_condition()
+        self.search_defect()
     
-    def update(self):
-        """Refresh screen"""
-        pass
+    
     
 HomeWindow().mainloop()

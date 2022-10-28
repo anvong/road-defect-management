@@ -5,6 +5,7 @@ from tkinter import ttk
 import sqlite3
 from sqlite3 import Error
 import os,sys
+from types import NoneType
 from tkcalendar import DateEntry
 
 # from database import lms_database
@@ -12,7 +13,7 @@ py=sys.executable
 
 #creating window
 class edit_defect(Tk):
-    def __init__(self,defect_id=None, update=None):
+    def __init__(self,defect_id=None):
         
         super().__init__()
         # top = Toplevel()
