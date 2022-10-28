@@ -26,7 +26,7 @@ class HomeWindow(Tk):
         self.mymenu = Menu(self)
         self.check()
         self.create_tree_widget()
-        # self.show_all_data()
+        self.show_all_data()
     #calling scripts
     def add_defect(self):
         os.system('%s %s' % (py, 'add_defect.py'))
