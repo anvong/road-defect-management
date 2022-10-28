@@ -29,7 +29,7 @@ class HomeWindow(Tk):
         self.show_all_data()
     #calling scripts
     def add_defect(self):
-        os.system('%s %s' % (py, 'add_defect.py'))
+        os.system('%s %s' % (py, 'defect/add_defect.py'))
 
         
 
@@ -77,7 +77,7 @@ class HomeWindow(Tk):
         ttk.Style().configure("Treeview",font=('Arial',10))
 
         list1 = Menu(self)
-        list1.add_command(label="Defects", command=self.add_defect)
+        list1.add_command(label="Add Defects", command=self.add_defect)
             
 
         list2 = Menu(self)

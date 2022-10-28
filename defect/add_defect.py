@@ -29,7 +29,7 @@ class add_defect(Tk):
         self.priority = StringVar()
         self.reported_date = StringVar()
         self.fixed_date = StringVar()
-        
+        # self.fixed_date = StringVar()
         self.create_tree_widget()
         # u = StringVar()
         # s = StringVar()
@@ -40,6 +40,9 @@ class add_defect(Tk):
             # lms_db = lms_database()
             self.conn = sqlite3.connect("defect_management.db")
             self.myCursor = self.conn.cursor()
+            #get descritop from text field
+            description_value = self.defect_description.get("1.0","end-1c")
+            # print(inputValue)
             parameters = [
                         # self.defect_id.get(),
                           self.defect_road_name.get(),
@@ -49,10 +52,11 @@ class add_defect(Tk):
                           self.priority.get(),
                           self.reported_date.get(),
                           self.fixed_date.get(),
+                          description_value,
                           ]
             print(parameters)
             # parameters = [1, '213', 'ada', 'aD', 'ad', 'aDa', None , None ]
-            c = self.myCursor.execute("Insert into defects(defect_road_name,defect_address,status,severity,priority,reported_date,fixed_date) values (?,?,?,?,?,?,?)", parameters)
+            c = self.myCursor.execute("Insert into defects(defect_road_name,defect_address,status,severity,priority,reported_date,fixed_date,description) values (?,?,?,?,?,?,?,?)", parameters)
             self.conn.commit()
             self.myCursor.close()
             self.conn.close()
@@ -67,10 +71,11 @@ class add_defect(Tk):
     def close(self):
         """Go back to main."""
         self.destroy()
-        os.system('%s %s' % (py, 'home.py'))
+        # os.system('%s %s' % (py, 'home.py'))
             
     # verify input
     def verify(self):
+        
         
         # if len(self.defect_id.get()) == 0:
         #     messagebox.showinfo("Error","Please enter defect id")
@@ -90,40 +95,47 @@ class add_defect(Tk):
                 
     def create_tree_widget(self):   
         # form title text 
-        input_form = Frame(self, width=650, height=480, bg="light blue").place(x=370, y=200)
+        input_form = Frame(self, width=700, height=500, bg="light blue").place(x=370, y=200)
         Label(self,text="New defect entry",font=("Arial",35,'bold'),fg="white",bg="dark blue").place(x=480,y=80)
         # input form lable
         # Label(input_form, text="Defect ID", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=260)
-        Label(input_form, text="Road Name", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=300)
-        Label(input_form, text="Road Address", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=340)
-        Label(input_form, text="Status", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=380)
-        Label(input_form, text="Severity", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=420)
-        Label(input_form, text="Rriority", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=460)
-        Label(input_form, text="Reported date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
-        Label(input_form, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
+        Label(input_form, text="Road Name", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=260)
+        Label(input_form, text="Road Address", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=300)
+        Label(input_form, text="Status", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=340)
+        Label(input_form, text="Severity", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=380)
+        Label(input_form, text="Rriority", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=420)
+        Label(input_form, text="Reported date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=460)
+        Label(input_form, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
+        Label(input_form, text="Description", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
         
         # input text field for defect id, road name, address
         # Entry(input_form, textvariable=self.defect_id, width=60).place(x=620,y=260)
-        Entry(input_form, textvariable=self.defect_road_name, width=60).place(x=620, y=300)
-        Entry(input_form, textvariable=self.defect_address, width=60).place(x=620, y=340)
+        Entry(input_form, textvariable=self.defect_road_name, width=60).place(x=620, y=260)
+        Entry(input_form, textvariable=self.defect_address, width=60).place(x=620, y=300)
         
         # combo box for status, serverity and priority
-        ttk.Combobox(input_form,textvariable=self.status,values=["new","in progress","done"],width=57,state="readonly").place(x = 620, y = 380)
-        ttk.Combobox(input_form,textvariable=self.severity,values=["critical","major","minor"],width=57,state="readonly").place(x = 620, y = 420)
-        ttk.Combobox(input_form,textvariable=self.priority,values=["high","medium","low"],width=57,state="readonly").place(x = 620, y = 460)
+        ttk.Combobox(input_form,textvariable=self.status,values=["new","in progress","done"],width=57,state="readonly").place(x = 620, y = 340)
+        ttk.Combobox(input_form,textvariable=self.severity,values=["critical","major","minor"],width=57,state="readonly").place(x = 620, y = 380)
+        ttk.Combobox(input_form,textvariable=self.priority,values=["high","medium","low"],width=57,state="readonly").place(x = 620, y = 420)
         
         # Entry(input_form, textvariable=self.severity, width=60).place(x=620, y=420)
         # Entry(input_form, textvariable=self.priority, width=60).place(x=620, y=460)
         cal1 =DateEntry(input_form,selectmode='day', textvariable = self.reported_date, width=20)
-        cal1.place(x=620, y=500)
-        Button(input_form,text="clear", width=8, font=("Arial", 9), command=lambda:cal1.delete(0,'end')).place(x=780, y=500)
+        cal1.place(x=620, y=460)
+        Button(input_form,text="clear", width=8, font=("Arial", 9), command=lambda:cal1.delete(0,'end')).place(x=780, y=460)
         
         cal2 = DateEntry(input_form,selectmode='day', textvariable = self.fixed_date, width=20)
-        cal2.place(x=620, y=540)
-        Button(input_form, text="clear", width=8, font=("Arial", 9), command=lambda:cal2.delete(0,'end')).place(x=780, y=540)
+        cal2.place(x=620, y=500)
+        Button(input_form, text="clear", width=8, font=("Arial", 9), command=lambda:cal2.delete(0,'end')).place(x=780, y=500)
+        
+        
+        # description field
+        # Create text widget and specify size.
+        self.defect_description = Text(input_form, height = 4, width = 47)
+        self.defect_description.place(x=620, y=540)
         # Entry(input_form, textvariable=self.reported_date, width=60).place(x=620, y=500)
         # Entry(input_form, textvariable=self.fixed_date, width=60).place(x=620, y=540)
-        Button(input_form, text="Save", width=10, font=("Arial", 13, "bold"), command=self.verify).place(x=560, y=620)
-        Button(input_form, text="Cancel", width=10, font=("Arial", 13, "bold"),command=self.close).place(x=720, y=620)
+        Button(input_form, text="Save", width=10, font=("Arial", 13, "bold"), command=self.verify).place(x=560, y=640)
+        Button(input_form, text="Cancel", width=10, font=("Arial", 13, "bold"),command=self.close).place(x=720, y=640)
     
 add_defect().mainloop()
