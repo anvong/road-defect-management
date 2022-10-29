@@ -51,6 +51,7 @@ class defect_database():
                 fixed_date       DATE    NOT NULL,
                 description      TEXT,
                 deleted_flag     BOOLEAN,
+                image            BLOB,
                 PRIMARY KEY (defect_id) 
             );
         """

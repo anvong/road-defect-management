@@ -6,6 +6,7 @@ import sqlite3
 from sqlite3 import Error
 import os,sys
 from tkcalendar import DateEntry
+from tkinter import filedialog
 
 # from database import lms_database
 py=sys.executable
@@ -30,6 +31,7 @@ class add_defect(Tk):
         self.reported_date = StringVar()
         self.fixed_date = StringVar()
         # self.fixed_date = StringVar()
+        self.defect_photo = StringVar()
         self.create_tree_widget()
         # u = StringVar()
         # s = StringVar()
@@ -53,10 +55,12 @@ class add_defect(Tk):
                           self.reported_date.get(),
                           self.fixed_date.get(),
                           description_value,
+                          '0', #delete_flag
+                          self.convert_to_binary_data(self.defect_photo.get())
                           ]
             print(parameters)
             # parameters = [1, '213', 'ada', 'aD', 'ad', 'aDa', None , None ]
-            c = self.myCursor.execute("Insert into defects(defect_road_name,defect_address,status,severity,priority,reported_date,fixed_date,description) values (?,?,?,?,?,?,?,?)", parameters)
+            c = self.myCursor.execute("Insert into defects(defect_road_name,defect_address,status,severity,priority,reported_date,fixed_date,description,deleted_flag,image) values (?,?,?,?,?,?,?,?,?,?)", parameters)
             self.conn.commit()
             self.myCursor.close()
             self.conn.close()
@@ -95,7 +99,7 @@ class add_defect(Tk):
                 
     def create_tree_widget(self):   
         # form title text 
-        input_form = Frame(self, width=700, height=500, bg="light blue").place(x=370, y=200)
+        input_form = Frame(self, width=700, height=530, bg="light blue").place(x=370, y=200)
         Label(self,text="New defect entry",font=("Arial",35,'bold'),fg="white",bg="dark blue").place(x=480,y=80)
         # input form lable
         # Label(input_form, text="Defect ID", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=260)
@@ -107,7 +111,7 @@ class add_defect(Tk):
         Label(input_form, text="Reported date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=460)
         Label(input_form, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
         Label(input_form, text="Description", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
-        
+        Label(input_form,text="Upload image", font=('Arial', 13, 'bold'),bg="light blue").place(x=420,y=630)
         # input text field for defect id, road name, address
         # Entry(input_form, textvariable=self.defect_id, width=60).place(x=620,y=260)
         Entry(input_form, textvariable=self.defect_road_name, width=60).place(x=620, y=260)
@@ -133,9 +137,24 @@ class add_defect(Tk):
         # Create text widget and specify size.
         self.defect_description = Text(input_form, height = 4, width = 47)
         self.defect_description.place(x=620, y=540)
+        # photo upload area
+        upload_image = Entry(self,textvariable = self.defect_photo,width = 50).place(x=620,y=630)
+        butt=Button(self,text="Browse",width=7,command=self.open_file_dialog).place(x=940,y=628)
+        
         # Entry(input_form, textvariable=self.reported_date, width=60).place(x=620, y=500)
         # Entry(input_form, textvariable=self.fixed_date, width=60).place(x=620, y=540)
-        Button(input_form, text="Save", width=10, font=("Arial", 13, "bold"), command=self.verify).place(x=560, y=640)
-        Button(input_form, text="Cancel", width=10, font=("Arial", 13, "bold"),command=self.close).place(x=720, y=640)
+        Button(input_form, text="Save", width=10, font=("Arial", 13, "bold"), command=self.verify).place(x=560, y=670)
+        Button(input_form, text="Cancel", width=10, font=("Arial", 13, "bold"),command=self.close).place(x=720, y=670)
+        
+    def open_file_dialog(self):
+        """File open dialog photo."""
+        filename = filedialog.askopenfilename(initialdir = "/",title = "Select a photo",filetype = (("jpeg","*.jpg"),("png","*.png"),("All Files","*.*")))
+        self.defect_photo.set(filename)
+            
+    def convert_to_binary_data(self,filename):
+        """Convert photo into binary data."""
+        with open(filename, 'rb') as file:
+            blobData = file.read()
+        return blobData
     
 add_defect().mainloop()

@@ -4,11 +4,11 @@ from tkinter.messagebox import showinfo
 
 import sqlite3
 from sqlite3 import Error
-import os
+import os, glob
 import sys
 from tkinter import ttk
 from database.defect_database import defect_database
-
+from PIL import ImageTk,Image
 
 py=sys.executable
 
@@ -103,7 +103,7 @@ class HomeWindow(Tk):
             self.defect_id_input = self.defect_id.get()
             self.defect_road_name_input = self.road_name.get()
             status_radio = self.search_status.get()
-            print("status",status_radio)
+            # print("status",status_radio)
             select_sql = "Select * from defects where deleted_flag = 0 "
             parameters =[]
             # check search input
@@ -131,7 +131,7 @@ class HomeWindow(Tk):
                 self.listTree.delete(*self.listTree.get_children())
                 row_num = 1
                 for row in self.pc:
-                    print(row)
+                    # print(row)
                     self.listTree.insert("",'end',text=row_num ,values = (row[0], row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
                     row_num +=1
             else:
@@ -179,7 +179,8 @@ class HomeWindow(Tk):
                 # search defect id input field
                 self.label4 = Label(self, text="Enter Defect ID", bg='light blue', font=('Arial', 12, 'bold'))
                 self.label4.place(x=100, y=150)
-                self.e1 = Entry(self, textvariable=self.defect_id, width=40).place(x=350, y=150)
+                self.e1 = Entry(self, textvariable=self.defect_id, width=40)
+                self.e1.place(x=350, y=150)
                 # self.label5 = Label(self, text='OR', bg='light blue', font=('arial', 12, 'bold')).place(x=170, y=235)
                 self.label5 = Label(self, text="Enter Road Name", bg='light blue', font=('Arial', 12, 'bold'))
                 self.label5.place(x=100, y=190)
@@ -231,8 +232,8 @@ class HomeWindow(Tk):
                 # search button
                 self.srt = Button(self, text='Search', width=15, font=('arial', 10),command = self.search_defect).place(x=700, y=280)
                 # edit button 
-                self.button = Button(self, text='Edit', width=10, font=('Arial', 11), command=self.goto_defect_edit).place(x=1200,y=500)
-                
+                self.button = Button(self, text='Edit', width=10, font=('Arial', 11), command=self.goto_defect_edit).place(x=1200,y=660)
+               
         except Error:
             messagebox.showerror("Error", "Something Goes Wrong")
                 
@@ -243,11 +244,43 @@ class HomeWindow(Tk):
             record = item['values']
             # show a message
             # self.showinfo(title='Information', message=','.join(record))
-            print(type(record))
+            # print(type(record))
             # a = ','.join(str(record))
             print(repr(tuple(record)))
+            # curItem = self.listTree.focus()
+            # selItem = self.listTree.item(curItem)
+            # pic = str(selItem['text'])
+            # print
+            # show photo by defect_id
+            self.show_photo(record[0]) 
             # showinfo(title='Information', message=repr(tuple(record)))
             
+    def show_photo(self, pic):
+            try:
+                self.conn = sqlite3.connect(defect_database.database_name)
+                self.mycursor = self.conn.cursor()
+                self.mycursor.execute("Select * from defects where defect_id = ?", [pic])
+                pc = self.mycursor.fetchone()
+                if pc[10]: # check defects.image columns data exists
+                    # print("Image",pc[10])
+                    photoPath = "defect_image_tmp/" + str(pc[0]) + ".jpeg"
+                    self.write_to_file(pc[10], photoPath)
+                    defect_photo = Image.open("defect_image_tmp/" + str(pc[0]) + ".jpeg")
+                    self.photo = ImageTk.PhotoImage(defect_photo)
+                    filelist = glob.glob("defect_image_tmp/*.jpeg")
+                    for file in filelist:
+                        os.remove(file)
+                else:
+                    self.photo = ImageTk.PhotoImage(Image.open("defect_image_tmp/noimage.png"))
+                # set photo
+                Label(image=self.photo, width=150, height=100).place(x=1180, y=450)
+            except Error:
+                messagebox.showerror("Error", "Something goes wrong")
+                
+    def write_to_file(self, data, filename):
+            with open(filename,'wb') as file:
+                file.write(data)
+                
     def goto_defect_edit(self):
         for selected_item in self.listTree.selection():
             item = self.listTree.item(selected_item)
@@ -258,7 +291,5 @@ class HomeWindow(Tk):
             
         # setup_search_condition()
         self.search_defect()
-    
-    
-    
+
 HomeWindow().mainloop()

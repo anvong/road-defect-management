@@ -17,7 +17,7 @@ class edit_defect(Tk):
         
         super().__init__()
         # top = Toplevel()
-        # self.frame = Frame(top)
+        # self = Frame(top)
         # self.update = update
         #
         print(sys.argv[1])
@@ -29,7 +29,7 @@ class edit_defect(Tk):
         self.minsize(1366, 768)
         self.state("zoomed")
         self.iconbitmap(r'images/defect.ico')
-        self.configure(background="dark blue")
+        self.configure(bg='light blue')
         #creating variables Please chech carefully
         self.defect_id = StringVar()
         self.defect_road_name = StringVar()
@@ -117,54 +117,55 @@ class edit_defect(Tk):
                 
     def create_tree_widget(self):   
         # form title text 
-        # input_form = self.frame
-        self.frame = Frame(self, width=700, height=500, bg="light blue").place(x=370, y=200)
-        Label(self,text="Update defect information",font=("Arial",35,'bold'),fg="white",bg="dark blue").place(x=480,y=80)
+        # input_form = self
+        # self = Frame(self, width=700, height=500, bg="light blue").place(x=370, y=200)
+        Label(self,text="Update defect information",font=("Arial",35,'bold'),bg="light blue").place(x=480,y=80)
         # input form lable
-        Label(self.frame, text="Defect ID", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=220)
-        Label(self.frame, text="Road Name", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=260)
-        Label(self.frame, text="Road Address", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=300)
-        Label(self.frame, text="Status", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=340)
-        Label(self.frame, text="Severity", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=380)
-        Label(self.frame, text="Rriority", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=420)
-        Label(self.frame, text="Reported date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=460)
-        Label(self.frame, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
-        Label(self.frame, text="Description", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
+        Label(self, text="Defect ID", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=220)
+        Label(self, text="Road Name", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=260)
+        Label(self, text="Road Address", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=300)
+        Label(self, text="Status", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=340)
+        Label(self, text="Severity", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=380)
+        Label(self, text="Rriority", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=420)
+        Label(self, text="Reported date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=460)
+        Label(self, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
+        Label(self, text="Description", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
+        test_lable = Label(self, text="test", font=("Arial", 13, "bold"), bg="light blue")
         
         # input text field for defect id, road name, address
         # Entry(input_form, textvariable=self.defect_id, width=60).place(x=620,y=260)
-        self.defect_id_input = Entry(self.frame, textvariable=self.defect_id, width=60, state="readonly", readonlybackground="light gray")
+        self.defect_id_input = Entry(self, textvariable=self.defect_id, width=60, state="readonly", readonlybackground="light gray")
         # self.defect_id_input.pack()
         self.defect_id_input.place(x=620,y=220)
-        Entry(self.frame, textvariable=self.defect_road_name, width=60).place(x=620, y=260)
-        Entry(self.frame, textvariable=self.defect_address, width=60).place(x=620, y=300)
+        Entry(self, textvariable=self.defect_road_name, width=60).place(x=620, y=260)
+        Entry(self, textvariable=self.defect_address, width=60).place(x=620, y=300)
         
         # combo box for status, serverity and priority
-        ttk.Combobox(self.frame,textvariable=self.status,values=["new","in progress","done"],width=57,state="readonly").place(x = 620, y = 340)
-        ttk.Combobox(self.frame,textvariable=self.severity,values=["critical","major","minor"],width=57,state="readonly").place(x = 620, y = 380)
-        ttk.Combobox(self.frame,textvariable=self.priority,values=["high","medium","low"],width=57,state="readonly").place(x = 620, y = 420)
+        ttk.Combobox(self,textvariable=self.status,values=["new","in progress","done"],width=57,state="readonly").place(x = 620, y = 340)
+        ttk.Combobox(self,textvariable=self.severity,values=["critical","major","minor"],width=57,state="readonly").place(x = 620, y = 380)
+        ttk.Combobox(self,textvariable=self.priority,values=["high","medium","low"],width=57,state="readonly").place(x = 620, y = 420)
         
-        # Entry(self.frame, textvariable=self.severity, width=60).place(x=620, y=420)
-        # Entry(self.frame, textvariable=self.priority, width=60).place(x=620, y=460)
-        cal1 =DateEntry(self.frame,selectmode='day', textvariable = self.reported_date, width=20)
+        # Entry(self, textvariable=self.severity, width=60).place(x=620, y=420)
+        # Entry(self, textvariable=self.priority, width=60).place(x=620, y=460)
+        cal1 =DateEntry(self,selectmode='day', textvariable = self.reported_date, width=20)
         cal1.place(x=620, y=460)
         
-        Button(self.frame,text="clear", width=8, font=("Arial", 9), command=lambda:cal1.delete(0,'end')).place(x=780, y=460)
+        Button(self,text="clear", width=8, font=("Arial", 9), command=lambda:cal1.delete(0,'end')).place(x=780, y=460)
         
-        cal2 = DateEntry(self.frame,selectmode='day', textvariable = self.fixed_date, width=20)
+        cal2 = DateEntry(self,selectmode='day', textvariable = self.fixed_date, width=20)
         cal2.place(x=620, y=500)
-        Button(self.frame, text="clear", width=8, font=("Arial", 9), command=lambda:cal2.delete(0,'end')).place(x=780, y=500)
+        Button(self, text="clear", width=8, font=("Arial", 9), command=lambda:cal2.delete(0,'end')).place(x=780, y=500)
         
         
         # description field
         # Create text widget and specify size.
-        self.defect_description = Text(self.frame, height = 4, width = 47)
+        self.defect_description = Text(self, height = 4, width = 47)
         self.defect_description.place(x=620, y=540)
         
-        # Entry(self.frame, textvariable=self.reported_date, width=60).place(x=620, y=500)
-        # Entry(self.frame, textvariable=self.fixed_date, width=60).place(x=620, y=540)
-        Button(self.frame, text="Save", width=10, font=("Arial", 13, "bold"), command=self.verify).place(x=560, y=640)
-        Button(self.frame, text="Cancel", width=10, font=("Arial", 13, "bold"),command=self.close).place(x=720, y=640)
+        # Entry(self, textvariable=self.reported_date, width=60).place(x=620, y=500)
+        # Entry(self, textvariable=self.fixed_date, width=60).place(x=620, y=540)
+        Button(self, text="Save", width=10, font=("Arial", 13, "bold"), command=self.verify).place(x=560, y=640)
+        Button(self, text="Cancel", width=10, font=("Arial", 13, "bold"),command=self.close).place(x=720, y=640)
     
     def get_defect_data(self, defect_id):
         """Get data from database."""
