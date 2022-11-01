@@ -18,8 +18,9 @@ class HomeWindow(Tk):
         super().__init__()
         self.iconbitmap(r'images/defect.ico')
         self.configure(bg='light blue')
-        self.maxsize(1366, 768)
-        self.minsize(1366, 768)
+        self.geometry("1366x768")
+        # self.maxsize(1366, 768)
+        # self.minsize(1366, 768)
         self.state('zoomed')
         self.title('Defect Management - Home')
         # search value
