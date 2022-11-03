@@ -8,6 +8,7 @@ import os,sys, glob
 from types import NoneType
 from tkcalendar import DateEntry
 from PIL import ImageTk,Image
+from tkinter import filedialog
 
 # from database import lms_database
 py=sys.executable
@@ -54,6 +55,9 @@ class edit_defect(Tk):
             #get descritop from text field
             description_value = self.defect_description.get("1.0","end-1c")
             # print(inputValue)
+            # get photo data
+            photo = self.defect_photo.get()
+            binary_photo = self.convert_to_binary_data(photo)
             parameters = [
                         # self.defect_id.get(),
                           self.defect_road_name.get(),
@@ -64,9 +68,11 @@ class edit_defect(Tk):
                           self.reported_date.get(),
                           self.fixed_date.get(),
                           description_value,
+                          binary_photo,
+                        #   self.convert_to_binary_data(self.defect_photo.get()),
                           self.defect_id.get()
                           ]
-            print(parameters)
+            # print(parameters)
             # parameters = [1, '213', 'ada', 'aD', 'ad', 'aDa', None , None ]
             query = """ UPDATE defects
                 SET defect_road_name = ?,
@@ -76,9 +82,10 @@ class edit_defect(Tk):
                 priority = ?,
                 reported_date = ?,
                 fixed_date = ?,
-                description = ?
+                description = ?,
+                image = ?
                 WHERE defect_id = ? """
-            print(query)
+            # print(query)
             c = self.myCursor.execute(query, parameters)
            
             self.conn.commit()
@@ -230,7 +237,7 @@ class edit_defect(Tk):
                 else:
                     self.photo = ImageTk.PhotoImage(Image.open("defect_image_tmp/noimage.png"))
                 # set photo
-                Label(image=self.photo, width=150, height=100).place(x=1180, y=450)
+                Label(image=self.photo, width=300, height=200).place(x=20, y=220)
             except Error:
                 messagebox.showerror("Error", "Something goes wrong")
                 
