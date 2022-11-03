@@ -4,9 +4,10 @@ import re
 from tkinter import ttk
 import sqlite3
 from sqlite3 import Error
-import os,sys
+import os,sys, glob
 from types import NoneType
 from tkcalendar import DateEntry
+from PIL import ImageTk,Image
 
 # from database import lms_database
 py=sys.executable
@@ -39,7 +40,8 @@ class edit_defect(Tk):
         self.priority = StringVar()
         self.reported_date = StringVar()
         self.fixed_date = StringVar()
-        # self.fixed_date = StringVar()
+        self.defect_photo = StringVar()
+        
         self.create_tree_widget()
        
         self.get_defect_data(defect_id)
@@ -131,7 +133,7 @@ class edit_defect(Tk):
         Label(self, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
         Label(self, text="Description", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
         test_lable = Label(self, text="test", font=("Arial", 13, "bold"), bg="light blue")
-        
+        Label(self,text="Upload image", font=('Arial', 13, 'bold'),bg="light blue").place(x=420,y=630)
         # input text field for defect id, road name, address
         # Entry(input_form, textvariable=self.defect_id, width=60).place(x=620,y=260)
         self.defect_id_input = Entry(self, textvariable=self.defect_id, width=60, state="readonly", readonlybackground="light gray")
@@ -161,11 +163,14 @@ class edit_defect(Tk):
         # Create text widget and specify size.
         self.defect_description = Text(self, height = 4, width = 47)
         self.defect_description.place(x=620, y=540)
+        # photo upload area
+        upload_image = Entry(self,textvariable = self.defect_photo,width = 50).place(x=620,y=630)
+        butt=Button(self,text="Browse",width=7,command=self.open_file_dialog).place(x=940,y=628)
         
         # Entry(self, textvariable=self.reported_date, width=60).place(x=620, y=500)
         # Entry(self, textvariable=self.fixed_date, width=60).place(x=620, y=540)
-        Button(self, text="Save", width=10, font=("Arial", 13, "bold"), command=self.verify).place(x=560, y=640)
-        Button(self, text="Cancel", width=10, font=("Arial", 13, "bold"),command=self.close).place(x=720, y=640)
+        Button(self, text="Save", width=10, font=("Arial", 13, "bold"), command=self.verify).place(x=560, y=670)
+        Button(self, text="Cancel", width=10, font=("Arial", 13, "bold"),command=self.close).place(x=720, y=670)
     
     def get_defect_data(self, defect_id):
         """Get data from database."""
@@ -188,7 +193,49 @@ class edit_defect(Tk):
             self.priority.set(data_item[5])
             self.reported_date.set(data_item[6])
             self.fixed_date.set(data_item[7])
+            # set description text area data
             if(data_item[8]!=None):
                 self.defect_description.insert("1.0",data_item[8])
+                
+            # show photo if it is set in database
+            # if(data_item[10]!=None):
+            self.show_photo(defect_id)
+                
+    def open_file_dialog(self):
+        """File open dialog photo."""
+        filename = filedialog.askopenfilename(initialdir = "/",title = "Select a photo",filetype = (("jpeg","*.jpg"),("png","*.png"),("All Files","*.*")))
+        self.defect_photo.set(filename)
             
+    def convert_to_binary_data(self,filename):
+        """Convert photo into binary data."""
+        with open(filename, 'rb') as file:
+            blobData = file.read()
+        return blobData
+    
+    def show_photo(self, pic):
+            try:
+                self.conn = sqlite3.connect("defect_management.db")
+                self.mycursor = self.conn.cursor()
+                self.mycursor.execute("Select * from defects where defect_id = ?", [pic])
+                pc = self.mycursor.fetchone()
+                if pc[10]: # check defects.image columns data exists
+                    # print("Image",pc[10])
+                    photoPath = "defect_image_tmp/" + str(pc[0]) + ".jpeg"
+                    self.write_to_file(pc[10], photoPath)
+                    defect_photo = Image.open("defect_image_tmp/" + str(pc[0]) + ".jpeg")
+                    self.photo = ImageTk.PhotoImage(defect_photo)
+                    filelist = glob.glob("defect_image_tmp/*.jpeg")
+                    for file in filelist:
+                        os.remove(file)
+                else:
+                    self.photo = ImageTk.PhotoImage(Image.open("defect_image_tmp/noimage.png"))
+                # set photo
+                Label(image=self.photo, width=150, height=100).place(x=1180, y=450)
+            except Error:
+                messagebox.showerror("Error", "Something goes wrong")
+                
+    def write_to_file(self, data, filename):
+            with open(filename,'wb') as file:
+                file.write(data)
+                
 edit_defect().mainloop()
