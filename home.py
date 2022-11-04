@@ -82,8 +82,11 @@ class HomeWindow(Tk):
         # Tree view font size
         ttk.Style().configure("Treeview",font=('Arial',10))
 
+        # set a dummy photo at the beginning
         Label(self, text="Preview photo", bg='light blue', font=('Arial', 12, 'bold')).place(x=1180, y=330)
-
+        self.photo = ImageTk.PhotoImage(Image.open("defect_image_tmp/noimage.png"))
+        # set photo location
+        Label(image=self.photo, width=150, height=100).place(x=1180, y=360)
         # menu setup
         list1 = Menu(self)
         list1.add_command(label="Add Defects", command=self.add_defect)
@@ -237,7 +240,9 @@ class HomeWindow(Tk):
                 # search button
                 self.srt = Button(self, text='Search', width=15, font=('arial', 10),command = self.search_defect).place(x=1100, y=190)
                 # edit button 
-                self.button = Button(self, text='Edit', width=10, font=('Arial', 11), command=self.goto_defect_edit).place(x=1200,y=660)
+                self.button = Button(self, text='Edit', width=10, font=('Arial', 11), command=self.goto_defect_edit).place(x=1200,y=620)
+                # delete button 
+                self.button = Button(self, text='Delete', width=10, font=('Arial', 11), fg="red", command=self.delete_defect).place(x=1200,y=670)
                
         except Error:
             messagebox.showerror("Error", "Something Goes Wrong")
@@ -297,5 +302,40 @@ class HomeWindow(Tk):
             
         # setup_search_condition()
         self.search_defect()
+    
+    def delete_defect(self):
+        for selected_item in self.listTree.selection():
+            item = self.listTree.item(selected_item)
+            record = item['values']
+            
+            x = messagebox.askyesno("Confirm","Do you want to delete this defect information?")
+            if x:
+                try:
+                    print("Delete:",record)
+                    # self.destroy()
+                    # os.system('%s %s' % (py, 'admin/admin_user_reg.py'))
+                    parameters = [
+                                record[0]
+                                ]
+                    # print(parameters)
+                    # parameters = [1, '213', 'ada', 'aD', 'ad', 'aDa', None , None ]
+                    query = """ UPDATE defects
+                        SET deleted_flag = 1
+                        WHERE defect_id = ? """
+                    print(query)
+                    print(parameters)
+                    
+                    self.conn = sqlite3.connect("defect_management.db")
+                    self.myCursor = self.conn.cursor()
+                    c = self.myCursor.execute(query, parameters)
+
+                    self.conn.commit()
+                    self.myCursor.close()
+                    self.conn.close()
+                
+                    # call load newest data with current search condition
+                    self.search_defect()
+                except Error:
+                    messagebox.showerror("Error","Something Goes Wrong")
 
 HomeWindow().mainloop()
