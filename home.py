@@ -225,7 +225,7 @@ class HomeWindow(Tk):
                 # self.label5 = Label(self, text='OR', bg='light blue', font=('arial', 12, 'bold')).place(x=170, y=235)
                 self.label5 = Label(self, text="Enter Road Name", bg='light blue', font=('Arial', 12, 'bold'))
                 self.label5.place(x=100, y=190)
-                
+
                 # search road name input field
                 Entry(self, textvariable=self.road_name, width=40).place(x=350, y=190)
                 # status condition
@@ -301,7 +301,6 @@ class HomeWindow(Tk):
             self.mycursor.execute("Select * from defects where defect_id = ?", [pic])
             # Fetch one record
             data = self.mycursor.fetchone()
-
             if data[10]:    # check defects.image columns data exists
                 # Define temporory image folder for showing image on windows
                 photo_path = "defect_image_tmp/" + str(data[0]) + ".jpeg"
