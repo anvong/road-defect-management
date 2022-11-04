@@ -1,59 +1,70 @@
+"""Home windows to show defect list."""
 from tkinter import *
 from tkinter import messagebox
 from tkinter.messagebox import showinfo
-
 import sqlite3
 from sqlite3 import Error
 import os, glob
 import sys
-from tkinter import ttk
+from tkinter import ttk, Tk
 from database.defect_database import defect_database
-from PIL import ImageTk,Image
+from PIL import ImageTk, Image
 
-py=sys.executable
+py = sys.executable
 
-#creating window
+
 class HomeWindow(Tk):
+    """Home window class to show defect list, edit, delete, add new records."""
+    
     def __init__(self):
+        """Class constructor."""
         super().__init__()
+        # display fav-icon on left-top of the window
         self.iconbitmap(r'images/defect.ico')
+        # set background color 
         self.configure(bg='light blue')
+        # set screen size
         self.geometry("1366x768")
         self.maxsize(1366, 768)
         self.minsize(1366, 768)
         self.state('zoomed')
+        # set window title
         self.title('Defect Management - Home')
-        # search value
+        # search condition input elements
         self.defect_id = StringVar()
         self.road_name = StringVar()
         self.search_status = StringVar()
         self.search_severity = StringVar()
         self.search_priority = StringVar()
-        # menu setup
-        self.mymenu = Menu(self)
+        # set up menu
+        self.menu_setup()
         # setup_search_condition
         self.setup_search_condition()
         # generate grid layout
         self.create_tree_widget()
         # load data to list
         self.show_all_data()
-    #calling scripts
+        
     def add_defect(self):
+        """Create a link menu to add defect window."""
         os.system('%s %s' % (py, 'defect/add_defect.py'))
 
     def add_user(self):
+        """Create a link menu to add admin user window."""
         os.system('%s %s' % (py, 'admin/admin_user_reg.py'))
         
     def create_tree_widget(self):
-        #creating table
-        data_columns = ('defect_id', 'defect_road_name', 'defect_address','status','severity','priority','reported_date','fixed_date')
-        # define headings
-        self.listTree = ttk.Treeview(self,height=14,columns=data_columns)
-        self.vsb = ttk.Scrollbar(self,orient="vertical",command=self.listTree.yview)
-        self.hsb = ttk.Scrollbar(self,orient="horizontal",command=self.listTree.xview)
+        """Generate the data list, scroll bar."""
+        # creating table
+        data_columns = ('defect_id', 'defect_road_name', 'defect_address', 'status', 'severity', 'priority', 'reported_date', 'fixed_date')
+        # define headings properties
+        self.listTree = ttk.Treeview(self, height=14, columns=data_columns)
+        # scrollbars
+        self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.listTree.yview)
+        self.hsb = ttk.Scrollbar(self, orient="horizontal", command=self.listTree.xview)
         
-        # test tree view
-        self.listTree.heading("#0",text='#',anchor = 'center')
+        # tree view header text
+        self.listTree.heading("#0", text='#', anchor = 'center')
         self.listTree.heading('defect_id', text='defect id')
         self.listTree.heading('defect_road_name', text='Road name')
         self.listTree.heading('defect_address', text='Address')
@@ -63,7 +74,7 @@ class HomeWindow(Tk):
         self.listTree.heading('reported_date', text='Reported date')
         self.listTree.heading('fixed_date', text='Fixed date')
         
-        # heading size
+        # config column size and text alignment
         self.listTree.column("#0",width=50,minwidth=50,anchor='center')
         self.listTree.column("defect_id",width=100,minwidth=100,anchor='center')
         self.listTree.column("defect_road_name",width=200,minwidth=200,anchor='center')
@@ -74,74 +85,95 @@ class HomeWindow(Tk):
         self.listTree.column("reported_date",width=100,minwidth=100,anchor='center')
         self.listTree.column("fixed_date",width=100,minwidth=100,anchor='center')
         self.listTree.bind("<ButtonRelease-1>",self.item_selected)
-
+        # set the location for the tree view
         self.listTree.place(x=90,y=360,height=350)
+        # add scrollbard next to datagrid
         self.vsb.place(x=1142,y=360,height=346)
-        # self.hsb.place(x=91, y=687, width=1050)
+        self.hsb.place(x=91, y=711, width=1050) # uncomment to have horizontal bar display
         
         # Tree view font size
         ttk.Style().configure("Treeview",font=('Arial',10))
 
-        # set a dummy photo at the beginning
+        # Add a preview photo lable
         Label(self, text="Preview photo", bg='light blue', font=('Arial', 12, 'bold')).place(x=1180, y=330)
+        # Add a no-image photo at the beginning
         self.photo = ImageTk.PhotoImage(Image.open("defect_image_tmp/noimage.png"))
         # set photo location
         Label(image=self.photo, width=150, height=100).place(x=1180, y=360)
+        
+
+    def menu_setup(self):
+        """Create menu bar."""
         # menu setup
+        self.mymenu = Menu(self)
+        # creaet defect menu
         list1 = Menu(self, tearoff=False)
+        # create admin user menu
         list2 = Menu(self, tearoff=False)
         list1.add_command(label="Add Defects", command=self.add_defect)
         list2.add_command(label = "Add User",command = self.add_user)
+        # add sub menus to menu bar
         self.mymenu.add_cascade(label='Defects', menu=list1)
         self.mymenu.add_cascade(label= 'Admin Tools', menu = list2)
-
+        # assign menu object to current window
         self.config(menu=self.mymenu)
-
+        
     def search_defect(self):
         """Search data by defect id."""
         
         try:
+            # prepare database connection
             self.conn = sqlite3.connect(defect_database.database_name)
             self.myCursor = self.conn.cursor()
+            # get values search input of defect, road name
             self.defect_id_input = self.defect_id.get()
             self.defect_road_name_input = self.road_name.get()
-            status_radio = self.search_status.get()
-            # print("status",status_radio)
+            # search SQL
             select_sql = "Select * from defects where deleted_flag = 0 "
+            # create SQL parameters
             parameters =[]
-            # check search input
+            # check and add SQL condition to SQL where condition and parameters
             if self.defect_id_input !="":
+                # defect id is input
                 select_sql += " AND defect_id = ?"
                 parameters += [self.defect_id_input]
             if self.defect_road_name_input:
+                # road name is input 
                 select_sql += " AND defect_road_name like ?"
                 parameters += [self.defect_road_name_input]
             if self.search_status.get() != "" and self.search_status.get() != "all":
+                # status value is input and not equal to all
                 select_sql += " AND status = ?"
                 parameters += [self.search_status.get()]
             if self.search_severity.get() != "" and self.search_severity.get() != "all":
+                # severity value is input and not equal to all
                 select_sql += " AND severity = ?"
                 parameters += [self.search_severity.get()]
             if self.search_priority.get() != "" and self.search_priority.get() != "all":
+                # priority value is input and not equal to all
                 select_sql += " AND priority = ?"
                 parameters += [self.search_priority.get()]
-                
-            print(select_sql)
-            print(parameters)
+            
+            # execute SQL to select data   
             self.myCursor.execute(select_sql,parameters)
+            # fecth all data
             self.pc = self.myCursor.fetchall()
+            
+            # if data is available
             if self.pc:
+                # clear data from the list before fill in new data
                 self.listTree.delete(*self.listTree.get_children())
-                row_num = 1
+                row_num = 1 # row number of the list
+                # loop all records to add each row element to list cells
                 for row in self.pc:
-                    # print(row)
+                    # add value to columns: defect_id, road_name, address, status, severity, priority, reported_date, fixed_date
                     self.listTree.insert("",'end',text=row_num ,values = (row[0], row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
                     row_num +=1
             else:
-                # messagebox.showinfo("Error", "Either Defect ID is wrong or the road name is not yet exist.")
+                # messagebox.showinfo("Error", "No data found.")
                 self.listTree.delete(*self.listTree.get_children())
         except Error:
-            messagebox.showerror("Error","Something Goes Wrong")
+            messagebox.showerror("Error", "Something Goes Wrong")
     
     def show_all_data(self):
         """Search data by defect id."""
