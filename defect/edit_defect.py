@@ -57,7 +57,11 @@ class edit_defect(Tk):
             # print(inputValue)
             # get photo data
             photo = self.defect_photo.get()
-            binary_photo = self.convert_to_binary_data(photo)
+            if photo != '':
+                print("Photo",photo)
+                binary_photo = self.convert_to_binary_data(photo)
+            else:
+                binary_photo = self.old_photo
             parameters = [
                         # self.defect_id.get(),
                           self.defect_road_name.get(),
@@ -206,6 +210,7 @@ class edit_defect(Tk):
                 
             # show photo if it is set in database
             # if(data_item[10]!=None):
+            self.old_photo = data_item[10]
             self.show_photo(defect_id)
                 
     def open_file_dialog(self):

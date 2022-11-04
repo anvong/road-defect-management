@@ -48,7 +48,7 @@ class HomeWindow(Tk):
         #creating table
         data_columns = ('defect_id', 'defect_road_name', 'defect_address','status','severity','priority','reported_date','fixed_date')
         # define headings
-        self.listTree = ttk.Treeview(self,height=13,columns=data_columns)
+        self.listTree = ttk.Treeview(self,height=14,columns=data_columns)
         self.vsb = ttk.Scrollbar(self,orient="vertical",command=self.listTree.yview)
         self.hsb = ttk.Scrollbar(self,orient="horizontal",command=self.listTree.xview)
         
@@ -75,12 +75,16 @@ class HomeWindow(Tk):
         self.listTree.column("fixed_date",width=100,minwidth=100,anchor='center')
         self.listTree.bind("<ButtonRelease-1>",self.item_selected)
 
-        self.listTree.place(x=90,y=400)
-        self.vsb.place(x=1142,y=400,height=287)
-        self.hsb.place(x=91,y=687,width=1050)
+        self.listTree.place(x=90,y=360,height=350)
+        self.vsb.place(x=1142,y=360,height=346)
+        # self.hsb.place(x=91, y=687, width=1050)
         
+        # Tree view font size
         ttk.Style().configure("Treeview",font=('Arial',10))
 
+        Label(self, text="Preview photo", bg='light blue', font=('Arial', 12, 'bold')).place(x=1180, y=330)
+
+        # menu setup
         list1 = Menu(self)
         list1.add_command(label="Add Defects", command=self.add_defect)
             
@@ -175,7 +179,7 @@ class HomeWindow(Tk):
                     os.system('%s %s' % (py, 'admin/admin_user_reg.py'))
             else:
                 #label and input box
-                self.label3 = Label(self, text='ASAP Defect List', bg='light blue', font=('Arial', 30, 'bold'))
+                self.label3 = Label(self, text='ASAP Defect List', bg='light blue', font=('Arial', 25, 'bold'))
                 self.label3.place(x=450, y=40)
                 # search defect id input field
                 self.label4 = Label(self, text="Enter Defect ID", bg='light blue', font=('Arial', 12, 'bold'))
@@ -228,10 +232,10 @@ class HomeWindow(Tk):
                 self.search_priority.set("all")
                 # search result list
                 # self.brt = Button(self, text='Find', width=15, font=('arial', 10),command = search_by_road_name).place(x=700, y=266)
-                self.label6 = Label(self, text="Details", bg='light blue', font=('Arial', 12, 'underline', 'bold'))
-                self.label6.place(x=100, y=350)
+                self.label6 = Label(self, text="Defect list", bg='light blue', font=('Arial', 13, 'bold'))
+                self.label6.place(x=100, y=300)
                 # search button
-                self.srt = Button(self, text='Search', width=15, font=('arial', 10),command = self.search_defect).place(x=700, y=280)
+                self.srt = Button(self, text='Search', width=15, font=('arial', 10),command = self.search_defect).place(x=1100, y=190)
                 # edit button 
                 self.button = Button(self, text='Edit', width=10, font=('Arial', 11), command=self.goto_defect_edit).place(x=1200,y=660)
                
@@ -274,7 +278,8 @@ class HomeWindow(Tk):
                 else:
                     self.photo = ImageTk.PhotoImage(Image.open("defect_image_tmp/noimage.png"))
                 # set photo
-                Label(image=self.photo, width=150, height=100).place(x=1180, y=450)
+                Label(image=self.photo, width=150, height=100).place(x=1180, y=360)
+                
             except Error:
                 messagebox.showerror("Error", "Something goes wrong")
                 
