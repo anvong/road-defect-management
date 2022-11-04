@@ -90,7 +90,7 @@ class edit_defect(Tk):
                 WHERE defect_id = ? """
             # print(query)
             c = self.myCursor.execute(query, parameters)
-           
+            # commit and close cursor, connection
             self.conn.commit()
             self.myCursor.close()
             self.conn.close()

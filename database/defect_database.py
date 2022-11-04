@@ -2,15 +2,13 @@
 
 import sqlite3
 
+
 class defect_database():
     """Database class working with sqlite3."""
-    
+
+    # databases name
     database_name = "defect_management.db"
-    
-    def __init__(self):
-        """Class constructution function."""
-        pass
-    
+
     def checkSetup(self):
         """Check the database to generate admin table."""
         conn = sqlite3.connect(defect_database.database_name)
@@ -24,10 +22,11 @@ class defect_database():
 
     def setup(self):
         """Do setup database connection."""
+        # create db connection and cursor
         conn = sqlite3.connect(defect_database.database_name)
         cursor = conn.cursor()
-        
-        #SQL to create admin user table
+
+        # SQL to create admin user table
         create_admin_table = """
             CREATE TABLE IF NOT EXISTS admin (
                 "id"	TEXT NOT NULL,
@@ -35,10 +34,10 @@ class defect_database():
                 "password"	TEXT NOT NULL,
                 "email"	TEXT NOT NULL,
                 "phone"	INTEGER NOT NULL CHECK(10),
-                 PRIMARY KEY("id") 
+                 PRIMARY KEY("id")
             );
         """
-        #SQL to create defects table
+        # SQL to create defects table
         create_defects_table = """
             CREATE TABLE IF NOT EXISTS defects (
                 defect_id        INTEGER NOT NULL UNIQUE,
@@ -52,19 +51,18 @@ class defect_database():
                 description      TEXT,
                 deleted_flag     BOOLEAN,
                 image            BLOB,
-                PRIMARY KEY (defect_id) 
+                PRIMARY KEY (defect_id)
             );
         """
-        # execute SQL to create admin table 
+        # execute SQL to create admin table fg
         cursor.execute(create_admin_table)
-        # execute SQL to create defects table 
+        # execute SQL to create defects table
         cursor.execute(create_defects_table)
         # commit the SQL to create table
         conn.commit()
-        # close connection 
+        # close connection
         conn.close()
 
-
     def getConnection(self):
-        """Get database connection"""
+        """Return database connection."""
         return sqlite3.connect('defect_management.db')

@@ -1,0 +1,44 @@
+defect_id,defect_road_name,defect_address,status,severity,priority,reported_date,fixed_date,description,deleted_flag,image
+1,Trower road,No 190,done,minor,low,09/01/2021,04/11/2022,something here,0,????
+2,Trower road,No 191,new,minor,high,10/01/2021,29/10/2022,done,1,????
+3,Trower road,No 192,new,minor,medium,11/01/2021,,aaa,0,????
+4,Trower road,No 193,done,minor,medium,12/01/2021,14/01/2021,,1,????
+5,Trower road,No 194,in progress,minor,medium,13/01/2021,,,0,????
+6,Trower road,No 195,new,minor,medium,14/01/2021,16/01/2021,"hi there
+hi bro",1,????
+7,Trower road,No 196,new,minor,medium,15/01/2021,17/01/2021,,1,????
+8,Trower road,No 197,done,minor,medium,16/01/2021,18/01/2021,,0,????
+9,Trower road,No 198,in progress,minor,medium,17/01/2021,,,0,????
+10,Trower road,No 199,new,minor,medium,18/01/2021,20/01/2021,,0,????
+11,Trower road,No 200,new,minor,medium,19/01/2021,21/01/2021,,0,????
+12,Trower road,No 201,done,minor,medium,20/01/2021,22/01/2021,,0,????
+13,Trower road,No 202,in progress,minor,medium,21/01/2021,,,1,????
+14,Trower road,No 203,new,minor,low,22/01/2021,24/01/2021,,1,????
+15,Trower road,No 204,new,minor,low,23/01/2021,25/01/2021,,1,????
+16,Trower road,No 205,done,minor,low,24/01/2021,26/01/2021,,0,????
+17,Trower road,No 206,in progress,minor,low,25/01/2021,,,1,????
+18,Trower road,No 207,new,minor,low,26/01/2021,28/01/2021,,0,????
+19,Trower road,No 208,new,minor,low,27/01/2021,29/01/2021,,0,????
+20,Trower road,No 209,done,minor,low,28/01/2021,30/01/2022,,1,????
+21,Sample Road Name 21,ajhdjahs,new,major,minor,05/09/2022,05/12/2022,,1,????
+22,Sample road name 22,Address of Sample road name 22,new,critical,medium,12/31/2021,,,0,????
+23,Sample road name 23,Address of Sample road name 23,new,major,medium,9/24/2022,,,0,????
+24,Sample road name 24,Address of Sample road name 24,new,minor,medium,12/10/2022,,,0,????
+25,Sample road name 25,Address of Sample road name 25,new,major,medium,28/10/2022,28/10/2022,,0,????
+26,Sample road name 26,Address of Sample road name 26,new,critical,medium,28/10/2022,28/10/2022,,0,????
+27,Sample road name 27,Address of Sample road name 27,new,critical,medium,28/10/2022,28/10/2022,,0,????
+28,Sample road name 28,Address of Sample road name 28,new,critical,high,01/10/2022,,,0,????
+29,Sample road name 29,Address of Sample road name 29,in progress,minor,medium,28/10/2022,28/10/2022,asdasdsa,1,????
+30,Sample road name 30,Address of Sample road name 30,new,critical,high,29/10/2022,29/10/2022,22222,1,????
+31,Sample road name 31,Address of Sample road name 31,new,major,high,29/10/2022,,New road here,0,????
+32,Sample road name 32,Address of Sample road name 32,new,critical,high,29/10/2022,,new road,1,????
+33,Sample road name 33,Address of Sample road name 33,done,critical,high,01/11/2022,02/11/2022,"new road tracy 
+done nhé em
+edit data",1,????
+34,Sample road name 34,Address of Sample road name 34,new,critical,,08/11/2022,,"new line
+new line",1,????
+35,Road ABC,11 Road ABC,new,critical,high,02/11/2022,03/11/2022,Something here is good	,1,????
+36,Yalyula,11 Yanyula Drive,new,major,medium,04/11/2022,,Another new defect,0,????
+37,anan,nnn,new,major,high,04/11/2022,04/11/2022,asdasd,0,????
+38,asda,asd,new,major,medium,05/11/2022,,asdad,0,????
+39,asdad,asdasd,new,major,low,05/11/2022,,asdsad,0,????

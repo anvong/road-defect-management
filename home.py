@@ -128,7 +128,19 @@ class HomeWindow(Tk):
             self.defect_id_input = self.defect_id.get()
             self.defect_road_name_input = self.road_name.get()
             # search SQL
-            select_sql = "Select * from defects where deleted_flag = 0 "
+            select_sql = """Select
+                                defect_id,
+                                defect_road_name,
+                                defect_address,
+                                status,
+                                severity,
+                                priority,
+                                reported_date,
+                                fixed_date,
+                                description,
+                                deleted_flag,
+                                image
+                            FROM defects where deleted_flag = 0 """
             # create SQL parameters
             parameters = []
             # check and add SQL condition to SQL where condition and parameters
@@ -180,7 +192,20 @@ class HomeWindow(Tk):
             self.conn = sqlite3.connect(defect_database.database_name)
             self.myCursor = self.conn.cursor()
             # Create SQL to select data
-            self.myCursor.execute("SELECT * FROM defects WHERE deleted_flag = 0 ")
+            select_sql = """Select
+                                defect_id,
+                                defect_road_name,
+                                defect_address,
+                                status,
+                                severity,
+                                priority,
+                                reported_date,
+                                fixed_date,
+                                description,
+                                deleted_flag,
+                                image
+                            FROM defects WHERE deleted_flag = 0 """
+            self.myCursor.execute(select_sql)
             self.pc = self.myCursor.fetchall()
             # Check if data exist
             if self.pc:

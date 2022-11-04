@@ -1,6 +1,5 @@
 """Database preparation."""
 import sys
-# sys.path.append('')
 from defect_database import defect_database
 
 # database setup
