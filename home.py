@@ -88,12 +88,12 @@ class HomeWindow(Tk):
         # set photo location
         Label(image=self.photo, width=150, height=100).place(x=1180, y=360)
         # menu setup
-        list1 = Menu(self)
+        list1 = Menu(self, tearoff=False)
+        list2 = Menu(self, tearoff=False)
         list1.add_command(label="Add Defects", command=self.add_defect)
-        list2 = Menu(self)
         list2.add_command(label = "Add User",command = self.add_user)
         self.mymenu.add_cascade(label='Defects', menu=list1)
-        self.mymenu.add_cascade(label = 'Admin Tools', menu = list2)
+        self.mymenu.add_cascade(label= 'Admin Tools', menu = list2)
 
         self.config(menu=self.mymenu)
 
