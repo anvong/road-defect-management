@@ -90,14 +90,9 @@ class HomeWindow(Tk):
         # menu setup
         list1 = Menu(self)
         list1.add_command(label="Add Defects", command=self.add_defect)
-            
-
         list2 = Menu(self)
         list2.add_command(label = "Add User",command = self.add_user)
-        
-
         self.mymenu.add_cascade(label='Defects', menu=list1)
-        
         self.mymenu.add_cascade(label = 'Admin Tools', menu = list2)
 
         self.config(menu=self.mymenu)

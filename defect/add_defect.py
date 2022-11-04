@@ -67,7 +67,7 @@ class add_defect(Tk):
             if c:
                 messagebox.showinfo("Confirm", "Data Inserted Successfully")
                 self.destroy()
-                os.system('%s %s' % (py, 'main.py'))
+                os.system('%s %s' % (py, 'home.py'))
         except Error:
             print(Error)
             messagebox.showinfo("Error", "Something Goes Wrong")
@@ -108,9 +108,9 @@ class add_defect(Tk):
         Label(self, text="Road Address", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=300)
         Label(self, text="Status", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=340)
         Label(self, text="Severity", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=380)
-        Label(self, text="Rriority", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=420)
+        Label(self, text="Priority", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=420)
         Label(self, text="Reported date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=460)
-        Label(self, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
+        # Label(self, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
         Label(self, text="Description", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
         Label(self,text="Upload image", font=('Arial', 13, 'bold'),bg="light blue").place(x=420,y=630)
         # input text field for defect id, road name, address
@@ -119,7 +119,8 @@ class add_defect(Tk):
         Entry(self, textvariable=self.defect_address, width=60).place(x=620, y=300)
         
         # combo box for status, serverity and priority
-        ttk.Combobox(self,textvariable=self.status,values=["new","in progress","done"],width=57,state="readonly").place(x = 620, y = 340)
+        ttk.Combobox(self,textvariable=self.status,values=["new"],width=57,state="readonly").place(x = 620, y = 340)
+        self.status.set("new")
         ttk.Combobox(self,textvariable=self.severity,values=["critical","major","minor"],width=57,state="readonly").place(x = 620, y = 380)
         ttk.Combobox(self,textvariable=self.priority,values=["high","medium","low"],width=57,state="readonly").place(x = 620, y = 420)
         
@@ -129,9 +130,9 @@ class add_defect(Tk):
         cal1.place(x=620, y=460)
         Button(self,text="clear", width=8, font=("Arial", 9), command=lambda:cal1.delete(0,'end')).place(x=780, y=460)
         
-        cal2 = DateEntry(self,selectmode='day', textvariable = self.fixed_date, width=20)
-        cal2.place(x=620, y=500)
-        Button(self, text="clear", width=8, font=("Arial", 9), command=lambda:cal2.delete(0,'end')).place(x=780, y=500)
+        # cal2 = DateEntry(self,selectmode='day', textvariable = self.fixed_date, width=20)
+        # cal2.place(x=620, y=500)
+        # Button(self, text="clear", width=8, font=("Arial", 9), command=lambda:cal2.delete(0,'end')).place(x=780, y=500)
         
         
         # description field

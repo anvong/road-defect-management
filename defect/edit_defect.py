@@ -139,7 +139,7 @@ class edit_defect(Tk):
         Label(self, text="Road Address", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=300)
         Label(self, text="Status", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=340)
         Label(self, text="Severity", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=380)
-        Label(self, text="Rriority", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=420)
+        Label(self, text="Priority", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=420)
         Label(self, text="Reported date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=460)
         Label(self, text="Fixed date", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=500)
         Label(self, text="Description", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=540)
