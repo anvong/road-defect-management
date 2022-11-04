@@ -9,7 +9,6 @@ from types import NoneType
 from tkcalendar import DateEntry
 from PIL import ImageTk,Image
 from tkinter import filedialog
-
 # from database import lms_database
 py=sys.executable
 
@@ -225,26 +224,30 @@ class edit_defect(Tk):
         return blobData
     
     def show_photo(self, pic):
-            try:
-                self.conn = sqlite3.connect("defect_management.db")
-                self.mycursor = self.conn.cursor()
-                self.mycursor.execute("Select * from defects where defect_id = ?", [pic])
-                pc = self.mycursor.fetchone()
-                if pc[10]: # check defects.image columns data exists
-                    # print("Image",pc[10])
-                    photoPath = "defect_image_tmp/" + str(pc[0]) + ".jpeg"
-                    self.write_to_file(pc[10], photoPath)
-                    defect_photo = Image.open("defect_image_tmp/" + str(pc[0]) + ".jpeg")
-                    self.photo = ImageTk.PhotoImage(defect_photo)
-                    filelist = glob.glob("defect_image_tmp/*.jpeg")
-                    for file in filelist:
-                        os.remove(file)
-                else:
-                    self.photo = ImageTk.PhotoImage(Image.open("defect_image_tmp/noimage.png"))
-                # set photo
-                Label(image=self.photo, width=300, height=200).place(x=20, y=220)
-            except Error:
-                messagebox.showerror("Error", "Something goes wrong")
+        """This function is to show the defect photo which stored from database."""
+        try:
+            # Prepare database connection
+            self.conn = sqlite3.connect("defect_management.db")
+            self.mycursor = self.conn.cursor()
+            # Query data from defects table by defect id
+            self.mycursor.execute("Select * from defects where defect_id = ?", [pic])
+            # Fetch one record
+            data = self.mycursor.fetchone()
+            if data[10]: # check defects.image columns data exists
+                # Define temporory image folder for showing image on windows
+                photoPath = "defect_image_tmp/" + str(data[0]) + ".jpeg"
+                self.write_to_file(data[10], photoPath)
+                defect_photo = Image.open("defect_image_tmp/" + str(data[0]) + ".jpeg")
+                self.photo = ImageTk.PhotoImage(defect_photo)
+                filelist = glob.glob("defect_image_tmp/*.jpeg")
+                for file in filelist:
+                    os.remove(file)
+            else:
+                self.photo = ImageTk.PhotoImage(Image.open("defect_image_tmp/noimage.png"))
+            # set photo
+            Label(image=self.photo, width=300, height=200).place(x=20, y=220)
+        except Error:
+            messagebox.showerror("Error", "Something goes wrong")
                 
     def write_to_file(self, data, filename):
             with open(filename,'wb') as file:
