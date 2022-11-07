@@ -72,7 +72,7 @@ class admin_user_reg(Tk):
         def close():
             """Go back to main window."""
             self.destroy()
-            os.system('%s %s' % (py, 'main.py'))
+            # os.system('%s %s' % (py, 'main.py'))
 
         def verify_input():
             """Verify user input."""
@@ -95,8 +95,8 @@ class admin_user_reg(Tk):
                 insert()
         # label
         input_form = Frame(self, width=650, height=400, bg="light blue").place(x=370, y=200)
-        Label(self, text="Defect Management System", font=("Arial", 35, 'bold'), fg="white", bg="dark blue").place(x=350, y=80)
-        Label(self, text="New user information", font=("Arial", 20, 'bold'), fg="white", bg="dark blue").place(x=450, y=650)
+        Label(self, text="Register New Admin User", font=("Arial", 35, 'bold'), fg="white", bg="dark blue").place(x=380, y=80)
+        # Label(self, text="New user information", font=("Arial", 20, 'bold'), fg="white", bg="dark blue").place(x=450, y=650)
         # Label(input_form, text = "User Information",font = ("Arial",13,"bold"),bg="light blue").place(x=600,y=220)
         Label(input_form, text="User ID", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=260)
         Label(input_form, text="Full Name", font=("Arial", 13, "bold"), bg="light blue").place(x=420, y=300)
