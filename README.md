@@ -12,9 +12,9 @@ ASAP is a mini desktop application for administrator user to manage road defect 
 
 ## Installation:
 ### Database setup
-The application will access to sqlite3 file: defect_management.db
-Therefore, if there is no database, please run the script below to create one.
-py .\database\database_migration.py
+Run the command below to create a new database: 
+py database/database_migration.py
+
 
 ### Python package
 There are list of required pythin libraries to run the application, please run each command to install with PIP.
@@ -22,8 +22,6 @@ There are list of required pythin libraries to run the application, please run e
 * pip install tkcalendar
 * pip install ImageTk
 * pip install re
-
-Run the command below to create a new database: py database/database_migration.py
 
 ## Features
 * Amdmin user login
