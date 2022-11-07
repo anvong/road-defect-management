@@ -27,6 +27,15 @@ class admin_user_reg(Tk):
         self.iconbitmap(r'images/defect.ico')
         # set window background
         self.configure(background="dark blue")
+        # get commandline argument to find previous window to go back
+        if len(sys.argv) < 2:
+            print("Missing previous window argument")
+            self.destroy()
+            return
+        elif sys.argv[1] == 'home':
+            self.prev_window = 'home'
+        else:
+            self.prev_window = 'main'
         # data input elements
         admin_id = StringVar()
         admin_name = StringVar()
@@ -53,8 +62,9 @@ class admin_user_reg(Tk):
                     messagebox.showinfo("Confirm", "Data Inserted Successfully")
                     # close window
                     self.destroy()
-                    # go to main screen for login
-                    os.system('%s %s' % (py, 'main.py'))
+                    if self.prev_window == 'main':
+                        # go to main screen for login
+                        os.system('%s %s' % (py, 'main.py'))
             except Error:
                 # in error case will show message
                 messagebox.showinfo("Error", "Something Goes Wrong")

@@ -49,10 +49,10 @@ class HomeWindow(Tk):
     def add_defect(self):
         """Create a link menu to add defect window."""
         os.system('%s %s' % (py, 'defect/add_defect.py'))
-
+        self.show_all_data()
     def add_user(self):
         """Create a link menu to add admin user window."""
-        os.system('%s %s' % (py, 'admin/admin_user_reg.py'))
+        os.system('%s %s %s' % (py, 'admin/admin_user_reg.py','home'))
 
     def create_tree_widget(self):
         """Generate the data list, scroll bar."""
@@ -151,7 +151,7 @@ class HomeWindow(Tk):
             if self.defect_road_name_input:
                 # road name is input 
                 select_sql += " AND defect_road_name like ?"
-                parameters += [self.defect_road_name_input]
+                parameters += ['%' + self.defect_road_name_input + '%']
             if self.search_status.get() != "" and self.search_status.get() != "all":
                 # status value is input and not equal to all
                 select_sql += " AND status = ?"

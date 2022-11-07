@@ -11,7 +11,7 @@ py = sys.executable
 
 class Asap(Tk):
     """Startup windows of the application."""
-    
+
     def __init__(self):
         """Class constructor."""
         super().__init__()
@@ -78,7 +78,7 @@ class Asap(Tk):
             # close data reader and connection
             mycursor.close()
             conn.close()
-            
+
             # If there is no admin user
             if not admin_user:
                 # show error message
@@ -89,7 +89,7 @@ class Asap(Tk):
                     # close current windows
                     self.destroy()
                     # open admin register window
-                    os.system('%s %s' % (py, 'admin/admin_user_reg.py'))
+                    os.system('%s %s %s' % (py, 'admin/admin_user_reg.py', 'main'))
             else:
                 # in case already have admin user will show the login form
                 # create an admin user info input form
@@ -110,7 +110,7 @@ class Asap(Tk):
                 # Login button
                 self.butt = Button(input_form, text="Login", font=10, width=15, command=self.check_login).place(x=460, y=400)
                 # Forgot Password button, disable for this version.
-                self.butt2 = Button(input_form, text="Forgot Password", font=10, width=18,state=DISABLED).place(x=700, y=400)
+                self.butt2 = Button(input_form, text="Forgot Password", font=10, width=18, state=DISABLED).place(x=700, y=400)
 
         except Error:
             messagebox.showinfo("Error", "The application can not start. Please check the configuration.")

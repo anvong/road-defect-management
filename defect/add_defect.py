@@ -76,7 +76,7 @@ class add_defect(Tk):
                 # close window
                 self.destroy()
                 # transit to  home page
-                os.system('%s %s' % (py, 'home.py'))
+                # os.system('%s %s' % (py, 'home.py'))
         except Error:
             # show message if any exceptional error
             messagebox.showinfo("Error", "Something Goes Wrong")
