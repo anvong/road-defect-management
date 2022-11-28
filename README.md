@@ -4,7 +4,6 @@ This is a free-will project that you can create from your own choice. It can be 
 
 ## Author
 * student name: Gia An Vong - s354803
-*  student name: Thi Thu Tran - s357356
 
 ## Program name:
 Road Defect Management named ASAP.
