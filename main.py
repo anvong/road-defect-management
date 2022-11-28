@@ -1,8 +1,6 @@
 """This is assignment 2 - question 2: Road Defect Management Mini Application.
 Entry point for the application."""
 # student name: Gia An Vong - s354803
-# student name: Thi Thu Tran - s357356
-
 
 from tkinter import * # noqa
 from tkinter import messagebox, Tk
